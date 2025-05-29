@@ -1,5 +1,3 @@
-// scripts/index.js
-
 window.onload = function() {
   // 确保数据初始化
   if (typeof initWordStorage === 'function') {
@@ -18,40 +16,26 @@ window.onload = function() {
     day: 'numeric',
     weekday: 'long'
   };
-  const dateEl = document.getElementById('current-date');
-  if (dateEl) {
-    dateEl.textContent = now.toLocaleDateString('zh-CN', options);
-  }
+  document.getElementById('current-date').textContent = now.toLocaleDateString('zh-CN', options);
   
   // 显示今日单词
   const wordListEl = document.getElementById('today-words-list');
   if (wordListEl) {
-    wordListEl.innerHTML = todayWords.map(wordObj => `
-      <li>
+    wordListEl.innerHTML = todayWords.map(wordObj => {
+      return `<li>
         <span class="word">${wordObj.word}</span>
         <span class="status">${getStatusText(wordObj.status)}</span>
-      </li>
-    `).join('');
+      </li>`;
+    }).join('');
   }
   
-  // 计算统计数据
-  const stats = {
-    total: allWords.length,
-    learning: allWords.filter(w => w.status === WORD_STATUS.LEARNING).length,
-    done: allWords.filter(w => w.status === WORD_STATUS.DONE).length,
-    new: allWords.filter(w => w.status === WORD_STATUS.NEW).length
-  };
+  // 更新统计信息
+  const stats = getStats();
   
-  // 更新统计面板
-  const totalEl = document.getElementById('total-words');
-  const learningEl = document.getElementById('learning-words');
-  const doneEl = document.getElementById('done-words');
-  const todayCountEl = document.getElementById('today-task-count');
-  
-  if (totalEl) totalEl.textContent = stats.total;
-  if (learningEl) learningEl.textContent = stats.learning;
-  if (doneEl) doneEl.textContent = stats.done;
-  if (todayCountEl) todayCountEl.textContent = todayWords.length;
+  document.getElementById('today-task-count').textContent = todayWords.length;
+  document.getElementById('total-words').textContent = stats.total;
+  document.getElementById('learning-words').textContent = stats.learning;
+  document.getElementById('done-words').textContent = stats.done;
   
   // 显示图表
   const ctx = document.getElementById('progress-chart');
@@ -59,9 +43,9 @@ window.onload = function() {
     const chartCtx = ctx.getContext('2d');
     
     // 计算图表数据
-    const learningCount = stats.learning;
-    const doneCount = stats.done;
-    const newCount = stats.new;
+    const learningCount = allWords.filter(w => w.status === WORD_STATUS.LEARNING).length;
+    const doneCount = allWords.filter(w => w.status === WORD_STATUS.DONE).length;
+    const newCount = allWords.length - learningCount - doneCount;
     
     new Chart(chartCtx, {
       type: 'pie',
