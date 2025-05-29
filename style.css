@@ -146,15 +146,20 @@ h1 {
   box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
 }
 
+/* 播放按钮样式 - 已修改 */
 .icon-btn {
   background: #FFECB3;
   border: none;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 1.5rem;
+  width: 50px; /* 宽度不变 */
+  height: 40px; /* 高度减小 */
+  border-radius: 20px; /* 调整为椭圆 */
+  font-size: 1.2rem; /* 字体减小 */
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
 
 .icon-btn:hover {
@@ -247,21 +252,21 @@ h1 {
   
   .icon-btn {
     align-self: center;
+    width: 45px; /* 手机宽度 */
+    height: 36px; /* 手机高度 */
+    font-size: 1.1rem; /* 手机字体 */
+    border-radius: 18px; /* 手机椭圆 */
   }
 }
+
 /* 图标样式 */
 .icon-btn i {
-  font-size: 1.4rem;
+  font-size: 1.3rem; /* 图标大小 */
 }
 
 /* 手机上的响应式调整 */
 @media (max-width: 600px) {
-  .icon-btn {
-    padding: 0 12px;
-    font-size: 1rem;
-  }
-  
   .icon-btn i {
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* 手机图标大小 */
   }
 }
