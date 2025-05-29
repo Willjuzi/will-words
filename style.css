@@ -150,16 +150,16 @@ h1 {
 .icon-btn {
   background: #FFECB3;
   border: none;
-  min-width: 90px;      /* 增加最小宽度 */
-  height: 46px;         /* 适当高度 */
+  min-width: 120px;     /* 大幅增加宽度 */
+  height: 46px;         /* 保持高度 */
   border-radius: 23px;  /* 完美椭圆 */
-  font-size: 1.1rem;    /* 减小字体大小 */
+  font-size: 1.1rem;    /* 字体大小 */
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 18px;      /* 左右内边距 */
+  padding: 0 20px;      /* 左右内边距 */
   gap: 8px;             /* 图标和文字间距 */
 }
 
@@ -252,11 +252,11 @@ h1 {
   }
   
   .icon-btn {
-    min-width: 80px;   /* 手机宽度 */
+    min-width: 100px;   /* 手机宽度 */
     height: 42px;      /* 手机高度 */
     font-size: 1rem;   /* 手机字体 */
     border-radius: 21px; /* 手机椭圆 */
-    padding: 0 15px;   /* 手机内边距 */
+    padding: 0 16px;   /* 手机内边距 */
     align-self: center;
   }
 }
