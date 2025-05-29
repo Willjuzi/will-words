@@ -146,20 +146,21 @@ h1 {
   box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
 }
 
-/* 播放按钮样式 - 已修改 */
+/* 播放按钮样式 - 已优化 */
 .icon-btn {
   background: #FFECB3;
   border: none;
-  width: 50px; /* 宽度不变 */
-  height: 40px; /* 高度减小 */
-  border-radius: 20px; /* 调整为椭圆 */
-  font-size: 1.2rem; /* 字体减小 */
+  min-width: 90px;      /* 增加最小宽度 */
+  height: 46px;         /* 适当高度 */
+  border-radius: 23px;  /* 完美椭圆 */
+  font-size: 1.1rem;    /* 减小字体大小 */
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
+  padding: 0 18px;      /* 左右内边距 */
+  gap: 8px;             /* 图标和文字间距 */
 }
 
 .icon-btn:hover {
@@ -251,11 +252,12 @@ h1 {
   }
   
   .icon-btn {
+    min-width: 80px;   /* 手机宽度 */
+    height: 42px;      /* 手机高度 */
+    font-size: 1rem;   /* 手机字体 */
+    border-radius: 21px; /* 手机椭圆 */
+    padding: 0 15px;   /* 手机内边距 */
     align-self: center;
-    width: 45px; /* 手机宽度 */
-    height: 36px; /* 手机高度 */
-    font-size: 1.1rem; /* 手机字体 */
-    border-radius: 18px; /* 手机椭圆 */
   }
 }
 
