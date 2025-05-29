@@ -1,0 +1,251 @@
+/* 基础样式 */
+:root {
+  --primary-color: #FF9800;
+  --primary-dark: #F57C00;
+  --secondary-color: #4CAF50;
+  --error-color: #F44336;
+  --background: #FFF8F0;
+  --card-bg: #FFFFFF;
+  --text-color: #333333;
+  --light-text: #757575;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background);
+  color: var(--text-color);
+  line-height: 1.6;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+h1 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.date-display {
+  color: var(--light-text);
+  font-size: 1.1rem;
+}
+
+/* 首页样式 */
+.today-words {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: var(--box-shadow);
+}
+
+.today-words h2 {
+  margin-bottom: 15px;
+  color: var(--primary-color);
+}
+
+#today-words-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+#today-words-list li {
+  background: #FFF3E0;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+#today-words-list li::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--primary-color);
+}
+
+.stats {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: var(--box-shadow);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #E8F5E9;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--light-text);
+}
+
+.stat-card p {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.chart-container {
+  height: 250px;
+  margin-top: 20px;
+}
+
+/* 按钮样式 */
+.primary-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+}
+
+.primary-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
+}
+
+.icon-btn {
+  background: #FFECB3;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: #FFD54F;
+  transform: scale(1.05);
+}
+
+/* 听写页面样式 */
+.listen-container {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 25px;
+  box-shadow: var(--box-shadow);
+}
+
+.input-area {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+#user-input {
+  flex: 1;
+  padding: 15px;
+  border: 2px solid #FFE0B2;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  transition: border-color 0.3s;
+}
+
+#user-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.feedback {
+  text-align: center;
+  font-size: 1.2rem;
+  min-height: 30px;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* 结果页面样式 */
+.result-container {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+
+.wrong-section {
+  background: #FFEBEE;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 25px;
+}
+
+.success-message {
+  background: #E8F5E9;
+  border-radius: 8px;
+  padding: 30px;
+  margin-top: 25px;
+}
+
+#wrong-list {
+  list-style: none;
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 15px 0;
+  text-align: left;
+}
+
+#wrong-list li {
+  padding: 10px;
+  border-bottom: 1px dashed #FFCDD2;
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+  body {
+    padding: 15px;
+  }
+  
+  .input-area {
+    flex-direction: column;
+  }
+  
+  .icon-btn {
+    align-self: center;
+  }
+}
