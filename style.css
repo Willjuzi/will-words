@@ -146,11 +146,11 @@ h1 {
   box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
 }
 
-/* 播放按钮样式 - 已优化 */
+/* 播放按钮样式 - 优化宽度 */
 .icon-btn {
   background: #FFECB3;
   border: none;
-  min-width: 120px;     /* 大幅增加宽度 */
+  min-width: 100px;     /* 适当宽度 */
   height: 46px;         /* 保持高度 */
   border-radius: 23px;  /* 完美椭圆 */
   font-size: 1.1rem;    /* 字体大小 */
@@ -180,10 +180,11 @@ h1 {
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
+  align-items: stretch; /* 确保所有元素等高 */
 }
 
 #user-input {
-  flex: 1;
+  flex: 1; /* 输入框占据最大可用空间 */
   padding: 15px;
   border: 2px solid #FFE0B2;
   border-radius: 8px;
@@ -194,6 +195,12 @@ h1 {
 #user-input:focus {
   outline: none;
   border-color: var(--primary-color);
+}
+
+/* 提交按钮 - 宽度减小 */
+#submit-btn {
+  min-width: 80px;     /* 减小提交按钮宽度 */
+  padding: 0 15px;     /* 减小内边距 */
 }
 
 .feedback {
@@ -258,6 +265,12 @@ h1 {
     border-radius: 21px; /* 手机椭圆 */
     padding: 0 16px;   /* 手机内边距 */
     align-self: center;
+  }
+  
+  /* 手机端提交按钮 */
+  #submit-btn {
+    min-width: 100%;   /* 手机端占满宽度 */
+    padding: 14px;     /* 恢复内边距 */
   }
 }
 
