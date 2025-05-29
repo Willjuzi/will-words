@@ -2,6 +2,7 @@ let currentIndex = 0;
 let wrongWords = []; // 本次听写中错误的单词
 let dailyWords = []; // 今日要听写的单词列表
 let currentWordObj = null; // 当前单词对象
+let practiceMode = 'first'; // 'first' | 'retry' | 'review'
 
 // 初始化听写页面
 function initListenPage() {
@@ -9,6 +10,20 @@ function initListenPage() {
   const storedWords = localStorage.getItem('dailyWords');
   if (storedWords) {
     dailyWords = JSON.parse(storedWords);
+    
+    // 检查练习模式
+    const urlParams = new URLSearchParams(window.location.search);
+    practiceMode = urlParams.get('mode') || 'first';
+    
+    if (practiceMode === 'retry') {
+      // 错词练习模式：只加载上次出错的单词
+      const lastWrongWords = JSON.parse(localStorage.getItem('lastWrongWords') || '[]');
+      dailyWords = lastWrongWords.length > 0 ? lastWrongWords : dailyWords;
+    } else if (practiceMode === 'review') {
+      // 复习模式：使用原始单词列表
+      // 不需要修改，使用dailyWords
+    }
+    
     if (dailyWords.length > 0) {
       currentWordObj = dailyWords[0];
       playCurrentWord();
@@ -53,11 +68,10 @@ function submitAnswer() {
     // 添加到错词列表（避免重复）
     if (!wrongWords.some(w => w.word === currentWordObj.word)) {
       wrongWords.push({...currentWordObj});
+      // 保存本次错词用于后续练习
+      localStorage.setItem('lastWrongWords', JSON.stringify(wrongWords));
     }
   }
-  
-  // 保存单词状态
-  saveWordStatus(currentWordObj);
   
   // 延迟后处理下一个单词
   setTimeout(() => {
@@ -74,91 +88,70 @@ function submitAnswer() {
   }, 1500); // 1.5秒后切换
 }
 
-// 保存单词状态
-function saveWordStatus(wordObj) {
-  const allWords = getAllWords();
-  const index = allWords.findIndex(w => w.word === wordObj.word);
-  
-  if (index !== -1) {
-    allWords[index] = wordObj;
-  } else {
-    allWords.push(wordObj);
-  }
-  
-  saveAllWords(allWords);
-}
-
 // 完成当日测试
 function finishDailyTest() {
   const container = document.querySelector('body');
-  container.innerHTML = `
-    <div class="result-container">
-      <h1>今日听写完成！</h1>
-      
-      ${wrongWords.length > 0 ? `
+  
+  if (wrongWords.length > 0) {
+    container.innerHTML = `
+      <div class="result-container">
+        <h1>今日听写完成！</h1>
         <div class="wrong-section">
           <h2>需要复习的单词 (${wrongWords.length})</h2>
           <ul id="wrong-list">
             ${wrongWords.map(word => `<li>${word.word}</li>`).join('')}
           </ul>
-          <button id="retry-btn" class="primary-btn">重新练习错词</button>
+          <div class="action-buttons">
+            <button id="retry-btn" class="primary-btn">只练错词</button>
+            <button id="review-btn" class="secondary-btn">全部重练</button>
+          </div>
         </div>
-      ` : `
+      </div>
+    `;
+  } else {
+    container.innerHTML = `
+      <div class="result-container">
+        <h1>今日听写完成！</h1>
         <div class="success-message">
           <p>🎉 太棒了！全部正确！</p>
-          <button id="home-btn" class="primary-btn">返回首页</button>
-        </div>
-      `}
-    </div>
-  `;
-  
-  // 添加事件监听
-  if (wrongWords.length > 0) {
-    document.getElementById('retry-btn').addEventListener('click', function() {
-      // 用错词作为新的练习列表
-      dailyWords = [...wrongWords];
-      wrongWords = [];
-      currentIndex = 0;
-      currentWordObj = dailyWords[0];
-      
-      // 重置页面
-      document.querySelector('body').innerHTML = `
-        <header>
-          <h1>听写模式 - 错词练习</h1>
-          <p>点击🔊播放单词，听写输入：</p>
-        </header>
-        
-        <main class="listen-container">
-          <div class="input-area">
-            <button id="play-btn" class="icon-btn">🔊 播放</button>
-            <input type="text" id="user-input" placeholder="请输入单词" autocomplete="off">
-            <button id="submit-btn" class="primary-btn">提交</button>
+          <div class="action-buttons">
+            <button id="review-btn" class="primary-btn">重新练习</button>
+            <button id="home-btn" class="secondary-btn">返回首页</button>
           </div>
-          
-          <p id="feedback" class="feedback"></p>
-        </main>
-        
-        <script src="scripts/app.js"></script>
-        <script src="scripts/words.js"></script>
-        <script src="scripts/algorithm.js"></script>
-        <script src="scripts/listen.js"></script>
-      `;
-      
-      // 重新初始化
-      initListenPage();
-      document.getElementById('play-btn').onclick = playCurrentWord;
-      document.getElementById('submit-btn').onclick = submitAnswer;
-      
-      // 支持回车提交
-      document.getElementById('user-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') submitAnswer();
-      });
+        </div>
+      </div>
+    `;
+  }
+  
+  // 绑定按钮事件
+  if (wrongWords.length > 0) {
+    document.getElementById('retry-btn').addEventListener('click', () => {
+      startPracticeSession('retry');
+    });
+    
+    document.getElementById('review-btn').addEventListener('click', () => {
+      startPracticeSession('review');
     });
   } else {
-    document.getElementById('home-btn').addEventListener('click', function() {
+    document.getElementById('review-btn').addEventListener('click', () => {
+      startPracticeSession('review');
+    });
+    
+    document.getElementById('home-btn').addEventListener('click', () => {
       window.location.href = 'index.html';
     });
   }
+}
+
+// 开始练习会话
+function startPracticeSession(mode) {
+  // 保存错词用于错词练习模式
+  if (mode === 'retry') {
+    localStorage.setItem('lastWrongWords', JSON.stringify(wrongWords));
+  }
+  
+  // 重定向到听写页并指定模式
+  window.location.href = `listen.html?mode=${mode}`;
 }
 
 // 页面加载初始化
