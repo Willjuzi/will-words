@@ -146,21 +146,21 @@ h1 {
   box-shadow: 0 6px 12px rgba(255, 152, 0, 0.4);
 }
 
-/* 播放按钮样式 - 优化宽度 */
+/* 播放按钮样式 */
 .icon-btn {
   background: #FFECB3;
   border: none;
-  min-width: 100px;     /* 适当宽度 */
-  height: 46px;         /* 保持高度 */
-  border-radius: 23px;  /* 完美椭圆 */
-  font-size: 1.1rem;    /* 字体大小 */
+  min-width: 100px;
+  height: 46px;
+  border-radius: 23px;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;      /* 左右内边距 */
-  gap: 8px;             /* 图标和文字间距 */
+  padding: 0 20px;
+  gap: 8px;
 }
 
 .icon-btn:hover {
@@ -180,11 +180,11 @@ h1 {
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
-  align-items: stretch; /* 确保所有元素等高 */
+  align-items: stretch;
 }
 
 #user-input {
-  flex: 1; /* 输入框占据最大可用空间 */
+  flex: 1;
   padding: 15px;
   border: 2px solid #FFE0B2;
   border-radius: 8px;
@@ -195,12 +195,6 @@ h1 {
 #user-input:focus {
   outline: none;
   border-color: var(--primary-color);
-}
-
-/* 提交按钮 - 宽度减小 */
-#submit-btn {
-  min-width: 80px;     /* 减小提交按钮宽度 */
-  padding: 0 15px;     /* 减小内边距 */
 }
 
 .feedback {
@@ -248,6 +242,33 @@ h1 {
   border-bottom: 1px dashed #FFCDD2;
 }
 
+/* 操作按钮组 */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.secondary-btn {
+  background: #E0E0E0;
+  color: #333;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.secondary-btn:hover {
+  background: #BDBDBD;
+  transform: translateY(-2px);
+}
+
 /* 响应式调整 */
 @media (max-width: 600px) {
   body {
@@ -259,29 +280,33 @@ h1 {
   }
   
   .icon-btn {
-    min-width: 100px;   /* 手机宽度 */
-    height: 42px;      /* 手机高度 */
-    font-size: 1rem;   /* 手机字体 */
-    border-radius: 21px; /* 手机椭圆 */
-    padding: 0 16px;   /* 手机内边距 */
+    min-width: 100px;
+    height: 42px;
+    font-size: 1rem;
+    border-radius: 21px;
+    padding: 0 16px;
     align-self: center;
   }
   
-  /* 手机端提交按钮 */
-  #submit-btn {
-    min-width: 100%;   /* 手机端占满宽度 */
-    padding: 14px;     /* 恢复内边距 */
+  /* 手机端操作按钮 */
+  .action-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .primary-btn, .secondary-btn {
+    width: 100%;
   }
 }
 
 /* 图标样式 */
 .icon-btn i {
-  font-size: 1.3rem; /* 图标大小 */
+  font-size: 1.3rem;
 }
 
 /* 手机上的响应式调整 */
 @media (max-width: 600px) {
   .icon-btn i {
-    font-size: 1.1rem; /* 手机图标大小 */
+    font-size: 1.1rem;
   }
 }
