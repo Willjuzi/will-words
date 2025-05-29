@@ -6,33 +6,43 @@ let practiceMode = 'first'; // 'first' | 'retry' | 'review'
 
 // 初始化听写页面
 function initListenPage() {
-  // 从首页获取今日单词
-  const storedWords = localStorage.getItem('dailyWords');
-  if (storedWords) {
-    dailyWords = JSON.parse(storedWords);
-    
-    // 检查练习模式
-    const urlParams = new URLSearchParams(window.location.search);
-    practiceMode = urlParams.get('mode') || 'first';
-    
-    if (practiceMode === 'retry') {
-      // 错词练习模式：只加载上次出错的单词
-      const lastWrongWords = JSON.parse(localStorage.getItem('lastWrongWords') || '[]');
-      dailyWords = lastWrongWords.length > 0 ? lastWrongWords : dailyWords;
-    } else if (practiceMode === 'review') {
-      // 复习模式：使用原始单词列表
-      // 不需要修改，使用dailyWords
-    }
-    
-    if (dailyWords.length > 0) {
-      currentWordObj = dailyWords[0];
-      playCurrentWord();
+  // 检查练习模式
+  const urlParams = new URLSearchParams(window.location.search);
+  practiceMode = urlParams.get('mode') || 'first';
+  
+  // 根据模式加载单词
+  if (practiceMode === 'retry') {
+    // 错词练习模式：只加载上次出错的单词
+    const lastWrongWords = JSON.parse(localStorage.getItem('lastWrongWords') || [];
+    if (lastWrongWords.length > 0) {
+      dailyWords = lastWrongWords;
+      document.querySelector('h1').textContent = '错词练习';
     } else {
-      alert('今日没有单词需要学习！');
+      alert('没有需要练习的错词！');
       window.location.href = 'index.html';
+      return;
     }
   } else {
-    alert('请从首页开始学习！');
+    // 其他模式：从首页获取今日单词
+    const storedWords = localStorage.getItem('dailyWords');
+    if (storedWords) {
+      dailyWords = JSON.parse(storedWords);
+      
+      if (practiceMode === 'review') {
+        document.querySelector('h1').textContent = '复习练习';
+      }
+    } else {
+      alert('请从首页开始学习！');
+      window.location.href = 'index.html';
+      return;
+    }
+  }
+  
+  if (dailyWords.length > 0) {
+    currentWordObj = dailyWords[0];
+    playCurrentWord();
+  } else {
+    alert('今日没有单词需要学习！');
     window.location.href = 'index.html';
   }
 }
@@ -54,13 +64,16 @@ function submitAnswer() {
   
   const isCorrect = userInput === currentWordObj.word.toLowerCase();
   
-  // 更新单词状态（核心记忆曲线逻辑）
+  // 更新单词状态
   updateWordStatus(currentWordObj, isCorrect);
   
   // 处理反馈
   if (isCorrect) {
     feedbackEl.textContent = '✅ 正确';
     feedbackEl.style.color = '#4CAF50';
+    
+    // 从错词列表中移除（如果存在）
+    wrongWords = wrongWords.filter(w => w.word !== currentWordObj.word);
   } else {
     feedbackEl.textContent = `❌ 错误，正确拼写是：${currentWordObj.word}`;
     feedbackEl.style.color = '#F44336';
@@ -68,10 +81,11 @@ function submitAnswer() {
     // 添加到错词列表（避免重复）
     if (!wrongWords.some(w => w.word === currentWordObj.word)) {
       wrongWords.push({...currentWordObj});
-      // 保存本次错词用于后续练习
-      localStorage.setItem('lastWrongWords', JSON.stringify(wrongWords));
     }
   }
+  
+  // 保存本次错词用于后续练习
+  localStorage.setItem('lastWrongWords', JSON.stringify(wrongWords));
   
   // 延迟后处理下一个单词
   setTimeout(() => {
@@ -95,7 +109,7 @@ function finishDailyTest() {
   if (wrongWords.length > 0) {
     container.innerHTML = `
       <div class="result-container">
-        <h1>今日听写完成！</h1>
+        <h1>${practiceMode === 'retry' ? '错词练习完成' : '今日听写完成'}！</h1>
         <div class="wrong-section">
           <h2>需要复习的单词 (${wrongWords.length})</h2>
           <ul id="wrong-list">
@@ -111,11 +125,11 @@ function finishDailyTest() {
   } else {
     container.innerHTML = `
       <div class="result-container">
-        <h1>今日听写完成！</h1>
+        <h1>${practiceMode === 'retry' ? '错词练习完成' : '今日听写完成'}！</h1>
         <div class="success-message">
           <p>🎉 太棒了！全部正确！</p>
           <div class="action-buttons">
-            <button id="review-btn" class="primary-btn">重新练习</button>
+            <button id="review-btn" class="primary-btn">${practiceMode === 'retry' ? '再练一遍' : '重新练习'}</button>
             <button id="home-btn" class="secondary-btn">返回首页</button>
           </div>
         </div>
@@ -134,7 +148,7 @@ function finishDailyTest() {
     });
   } else {
     document.getElementById('review-btn').addEventListener('click', () => {
-      startPracticeSession('review');
+      startPracticeSession(practiceMode === 'retry' ? 'retry' : 'review');
     });
     
     document.getElementById('home-btn').addEventListener('click', () => {
@@ -146,7 +160,7 @@ function finishDailyTest() {
 // 开始练习会话
 function startPracticeSession(mode) {
   // 保存错词用于错词练习模式
-  if (mode === 'retry') {
+  if (mode === 'retry' && wrongWords.length > 0) {
     localStorage.setItem('lastWrongWords', JSON.stringify(wrongWords));
   }
   
