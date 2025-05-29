@@ -249,3 +249,19 @@ h1 {
     align-self: center;
   }
 }
+/* 图标样式 */
+.icon-btn i {
+  font-size: 1.4rem;
+}
+
+/* 手机上的响应式调整 */
+@media (max-width: 600px) {
+  .icon-btn {
+    padding: 0 12px;
+    font-size: 1rem;
+  }
+  
+  .icon-btn i {
+    font-size: 1.2rem;
+  }
+}
