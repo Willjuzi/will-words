@@ -1,8 +1,18 @@
 window.onload = function() {
-  // 获取今日单词
-  const todayWords = getTodayWords();
+  // 获取当日计划
+  const todayWords = getDailyPlan();
   const allWords = getAllWords();
   const stats = getStats();
+  
+  // 显示当前日期
+  const now = new Date();
+  const options = { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    weekday: 'long'
+  };
+  document.getElementById('current-date').textContent = now.toLocaleDateString('zh-CN', options);
   
   // 显示今日单词
   const wordListEl = document.getElementById('today-words-list');
@@ -32,7 +42,7 @@ window.onload = function() {
   new Chart(ctx, {
     type: 'pie',
     data: {
-      labels: ['已完成', '记忆中', '未学习'],
+      labels: ["已完成", "记忆中", "待学习"],
       datasets: [{
         data: [doneCount, learningCount, newCount],
         backgroundColor: ['#4CAF50', '#FF9800', '#9E9E9E']
@@ -59,3 +69,13 @@ window.onload = function() {
     });
   }
 };
+
+// 辅助函数：获取状态文本
+function getStatusText(status) {
+  const statusMap = {
+    'new': '新词',
+    'learning': '记忆中',
+    'done': '已完成'
+  };
+  return statusMap[status] || status;
+}
