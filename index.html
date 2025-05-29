@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>桔子的单词大挑战</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>桔子的单词大挑战</h1>
+    <p class="date-display" id="current-date"></p>
+  </header>
+  
+  <main>
+    <section class="today-words">
+      <h2>今日单词 (8个)</h2>
+      <ul id="today-words-list"></ul>
+    </section>
+    
+    <section class="stats">
+      <h2>学习统计</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>今日任务</h3>
+          <p id="today-task-count">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>已学习</h3>
+          <p id="total-words">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>记忆中</h3>
+          <p id="learning-words">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>已完成</h3>
+          <p id="done-words">0</p>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <canvas id="progress-chart"></canvas>
+      </div>
+    </section>
+    
+    <button id="start-btn" class="primary-btn">进入听写模式</button>
+  </main>
+  
+  <script src="scripts/app.js"></script>
+  <script src="scripts/words.js"></script>
+  <script src="scripts/algorithm.js"></script>
+  <script src="scripts/index.js"></script>
+</body>
+</html>
