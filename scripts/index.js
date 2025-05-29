@@ -1,11 +1,6 @@
 window.onload = function() {
-  // 确保数据初始化
-  if (typeof initWordStorage === 'function') {
-    initWordStorage();
-  }
-  
-  // 获取当日计划
-  const todayWords = getDailyPlan();
+  // 获取今日单词
+  const todayWords = getTodayWords();
   const allWords = getAllWords();
   
   // 显示当前日期
@@ -21,52 +16,36 @@ window.onload = function() {
   // 显示今日单词
   const wordListEl = document.getElementById('today-words-list');
   if (wordListEl) {
-    wordListEl.innerHTML = todayWords.map(wordObj => {
-      return `<li>
+    wordListEl.innerHTML = todayWords.map(wordObj => `
+      <li>
         <span class="word">${wordObj.word}</span>
         <span class="status">${getStatusText(wordObj.status)}</span>
-      </li>`;
-    }).join('');
+      </li>
+    `).join('');
   }
   
   // 更新统计信息
-  const stats = getStats();
-  
   document.getElementById('today-task-count').textContent = todayWords.length;
-  document.getElementById('total-words').textContent = stats.total;
-  document.getElementById('learning-words').textContent = stats.learning;
-  document.getElementById('done-words').textContent = stats.done;
+  document.getElementById('total-words').textContent = allWords.length;
+  document.getElementById('learning-words').textContent = allWords.filter(w => w.status === 'learning').length;
+  document.getElementById('done-words').textContent = allWords.filter(w => w.status === 'done').length;
   
   // 显示图表
-  const ctx = document.getElementById('progress-chart');
-  if (ctx) {
-    const chartCtx = ctx.getContext('2d');
-    
-    // 计算图表数据
-    const learningCount = allWords.filter(w => w.status === WORD_STATUS.LEARNING).length;
-    const doneCount = allWords.filter(w => w.status === WORD_STATUS.DONE).length;
-    const newCount = allWords.length - learningCount - doneCount;
-    
-    new Chart(chartCtx, {
-      type: 'pie',
-      data: {
-        labels: ["已完成", "记忆中", "待学习"],
-        datasets: [{
-          data: [doneCount, learningCount, newCount],
-          backgroundColor: ['#4CAF50', '#FF9800', '#9E9E9E']
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        }
-      }
-    });
-  }
+  const ctx = document.getElementById('progress-chart').getContext('2d');
+  const learningCount = allWords.filter(w => w.status === 'learning').length;
+  const doneCount = allWords.filter(w => w.status === 'done').length;
+  const newCount = allWords.length - learningCount - doneCount;
+  
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ["已完成", "记忆中", "待学习"],
+      datasets: [{
+        data: [doneCount, learningCount, newCount],
+        backgroundColor: ['#4CAF50', '#FF9800', '#9E9E9E']
+      }]
+    }
+  });
   
   // 进入听写模式按钮
   const startBtn = document.getElementById('start-btn');
